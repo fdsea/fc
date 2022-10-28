@@ -308,6 +308,7 @@ input[type=file]::file-selector-button {
     background-color: #fff;
     position: static;
     transition: 0.3s ease;
+    transform: translate(0);
 }
 .dialog {
     width: calc(100% - 300px);
@@ -320,9 +321,7 @@ input[type=file]::file-selector-button {
     background-color: #fff;
     transition: 0.2s ease;
 }
-.contacts--open {
-    transform: translateX(100%);
-}
+
 .contact:not(:last-child) {
     margin-bottom: 0.5rem;
 }
@@ -365,6 +364,9 @@ input[type=file]::file-selector-button {
 }
 
 @media screen and (max-width: 746px) {
+    .contacts--open {
+        transform: translateX(100%);
+    }
     .contacts {
         position: fixed;
         height: 100%;
