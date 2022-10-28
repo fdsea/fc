@@ -291,3 +291,93 @@ input[type=file]::file-selector-button {
     cursor: not-allowed;
 }
 
+.wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100vh;
+}
+
+.contacts {
+    max-width: 300px;
+    width: 100%;
+    padding: 2rem 1rem;
+    overflow: auto;
+    height: 100%;
+    background-color: #fff;
+    position: static;
+    transition: 0.3s ease;
+}
+.dialog {
+    width: calc(100% - 300px);
+}
+.contact {
+    border: 1px solid #aaa;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-color: #fff;
+    transition: 0.2s ease;
+}
+.contacts--open {
+    transform: translateX(100%);
+}
+.contact:not(:last-child) {
+    margin-bottom: 0.5rem;
+}
+
+.contact:hover {
+    background-color: #eee;
+}
+
+.contact__inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.contact__avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    background-color: #aaa;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    border-radius: 50%;
+    margin-right: 0.6rem;
+}
+
+.contact-info {
+    color: #222;
+    font-size: 1rem;
+}
+.room-header {
+    display: none;
+    width: 100%;
+    padding: 0rem 0 1rem;
+}
+.room-header__action {
+    border: 1px solid #aaa;
+    padding: 0.1em 0.3em;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 746px) {
+    .contacts {
+        position: fixed;
+        height: 100%;
+        left: -100%;
+        top: 0;
+        width: 100%;
+        max-width: 100%;
+        z-index: 100;
+    }
+    .dialog {
+        width: 100%;
+    }
+    .room-header {
+        display: block;
+    }
+}

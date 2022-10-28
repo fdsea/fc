@@ -33,11 +33,34 @@ var FAKE_MESSAGES = [
   }
 ];
 
+var FAKE_CONTACTS = [
+  {
+    letter: 'A',
+    username: 'tester_huester_a'
+  },
+  {
+    letter: 'B',
+    username: 'tester_huester_b'
+  },
+  {
+    letter: 'C',
+    username: 'tester_huester_c'
+  },
+  {
+    letter: 'A',
+    username: 'tester_huester_a'
+  }
+];
+
+!function(t,e){"function"==typeof define&&define.amd?define(e):"object"==typeof exports?module.exports=e():t.ActionController=e()}(this,function(){"use strict";function t(t,e){this.currentElement=null,this.actions=e||{},this.attr=t,this.events=["click","input","change"],this.checkers={},this.checker=this.checker.bind(this),this.init()}return t.prototype.$attr=function(t){return this.el.getAttribute(t)},t.prototype.$val=function(){return this.event.target.value},t.prototype.checkElement=function(t){return t.getAttribute(this.attr)?{link:t,name:t.getAttribute(this.attr)}:{link:t.closest("["+this.attr+"]"),name:t.closest("["+this.attr+"]")?t.closest("["+this.attr+"]").getAttribute(this.attr):null}},t.prototype.add=function(t){for(var e in t)t.hasOwnProperty(e)&&(this.actions[e]=t[e],this.actions[e].$attr=this.$attr.bind(this.actions[e]),this.actions[e].$val=this.$val.bind(this.actions[e]))},t.prototype.checker=function(t){var e=this,n=t||"click";return function(t){e.currentElement;var i=e.currentElement=e.checkElement(t.target),r=e.actions[i.name];if(!i||!r||(r.type||"click")!==n)return!1;r.event=t,r.el=i.link,r.name=i.name,r.action({event:t,el:i.link,name:i.name})}},t.prototype.setListeners=function(){var t=this;t.events.forEach(function(e){var n=t.checker(e);t.checkers[e+"controller"]={listener:n,event:e},document.addEventListener(e,t.checkers[e+"controller"].listener)})},t.prototype.removetListeners=function(){if(!this.checkers.length)return!1;this.checkers.forEach(function(t){document.addEventListener(t.event,t.listener)})},t.prototype.init=function(){this.removetListeners(),this.setListeners()},t});
+
 (function() {
   var $ = function(selector) {
     return document.querySelector(selector);
   };
 
+  var contacts = $('.contacts-list');
+  var contactsContainer = $('.contacts-container');
   var chatroom = $('.chat-room');
   var field = $('.chat-field');
   var action = $('.chat-action');
@@ -46,12 +69,27 @@ var FAKE_MESSAGES = [
 
   var setFakeMessageAfterSuccessRequest = true;
 
+  window.$controller$ = new ActionController('data-controller', {});
+
   /*
   * IMessagePayload = {letter: string; message: string; time: string}
   * TMessage = self | partner
+  * IContact = {letter: string; username: string};
   *
   * */
   var CHAT = {
+    getContactMarkup: function(payload/*IContact*/) {
+      return '<div class="contact" data-controller="contact" data-contact-id="'+ payload.username +'">' +
+        '<div class="contact__inner">' +
+        '   <div class="contact__avatar">' +
+        '     <span>'+ payload.letter +'</span>' +
+        '   </div>\n' +
+        '   <div class="contact__info">' +
+        '      <span>'+ payload.username +'</span>' +
+        '    </div>' +
+        '    </div>' +
+        '</div>'
+    },
     getMessageMarkup: function (
       type, /* TMessage */
       payload /* IMessagePayload */
@@ -72,15 +110,23 @@ var FAKE_MESSAGES = [
         '            </div>\n' +
         '        </div>'
     },
-    getAllMessagesMarkup: function(list /*array<{payload: IMessagePayload, type: TMessage}>*/) {
+
+    getAllMessagesMarkup: function(list /*array<{payload: IMessagePayload, type: TMessage}>*/, creator) {
       return list.map(function(message) {
-        return CHAT.getMessageMarkup(message.type, message.payload);
+        return creator(message.type, message.payload);
       }).join('');
     },
+
+    getAllContactsMarkup: function(list/*array<IContact>*/, creator) {
+      return list.map(function(contact) {
+        return creator(contact);
+      }).join('');
+    },
+
+    /*** MESSAGES ***/
     setMarkupOnChatRoom(markup /* string */) {
       chatroom.insertAdjacentHTML('beforeend', markup);
     },
-    /******/
     setAvailability: function(status) {
       action.disabled = !status;
     },
@@ -107,40 +153,79 @@ var FAKE_MESSAGES = [
       field.value = '';
     },
     /******/
+    /*** CONTACTS ***/
+    setMarkupOnContactsList(markup /* string */) {
+      contacts.insertAdjacentHTML('beforeend', markup);
+    },
+    /****************/
     init: function() {
-      CHAT.loadMessages(FAKE_MESSAGES);
+      CHAT.loadContacts(FAKE_CONTACTS);
       CHAT.controller();
     },
     controller: function() {
-      action.addEventListener('click', function() {
-        var message = field.value;
-        CHAT.setAvailability(false)
-        CHAT.sendMessage(message)
-          .then(function() {
-            CHAT.setMessageOnChatRoom(message);
-            CHAT.clearField();
+      $controller$.add({
+        "contact": {
+          action: function () {
+            var id = this.$attr('data-contact-id');
 
-            if(setFakeMessageAfterSuccessRequest) {
-              setTimeout(function() {
-                CHAT.for_test_IncomingMessage({
-                  message: 'message: ' + Math.random(),
-                  time: CHAT.getCurrentTime(),
-                  letter: 'R'
-                })
-              }, 1000);
-            }
-          })
-          .finally(() => {
-            CHAT.setAvailability(true)
-          })
+            /*тут получать мессаги по id*/
+            CHAT.loadMessages(FAKE_MESSAGES);
+            CHAT.hideContactsList();
+          }
+        },
+        "chat-action": {
+          action: function() {
+            var message = field.value;
+            CHAT.setAvailability(false)
+            CHAT.sendMessage(message)
+              .then(function() {
+                CHAT.setMessageOnChatRoom(message);
+                CHAT.clearField();
+
+                if(setFakeMessageAfterSuccessRequest) {
+                  setTimeout(function() {
+                    CHAT.for_test_IncomingMessage({
+                      message: 'message: ' + Math.random(),
+                      time: CHAT.getCurrentTime(),
+                      letter: 'R'
+                    })
+                  }, 1000);
+                }
+              })
+              .finally(() => {
+                CHAT.setAvailability(true)
+              })
+          }
+        },
+        "back-to-contact-list": {
+          action: function() {
+            CHAT.openContactsList();
+          }
+        }
       });
     },
-    loadMessages(loadMessages) {
+    hideContactsList() {
+      contactsContainer.classList.remove('contacts--open');
+    },
+    openContactsList() {
+      contactsContainer.classList.add('contacts--open');
+    },
+    scrollToTop: function() {
+      console.log(chatroom.scrollHeight)
+      chatroom.scrollTop = chatroom.scrollHeight;
+    },
+    loadMessages: function(messagesList) {
       setTimeout(function () {
-        var m = CHAT.getAllMessagesMarkup(loadMessages)
-        console.log(m)
-        CHAT.setMarkupOnChatRoom(m)
+        var m = CHAT.getAllMessagesMarkup(messagesList, CHAT.getMessageMarkup);
+        CHAT.setMarkupOnChatRoom(m);
+        CHAT.scrollToTop();
       }, 2000);
+    },
+    loadContacts: function(contacts /*IContact*/) {
+      setTimeout(function() {
+        var c = CHAT.getAllContactsMarkup(contacts, CHAT.getContactMarkup);
+        CHAT.setMarkupOnContactsList(c);
+      }, 1000)
     },
     for_test_IncomingMessage(payload /* IMessagePayload */) {
       var markup = CHAT.getMessageMarkup('partner', {
