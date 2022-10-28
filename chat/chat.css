@@ -1,0 +1,293 @@
+
+html {
+    font-family: SansSerif, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    color: #262626;
+}
+
+body {
+    background: rgba(238, 238, 238, 0.3);
+    height: 100vh;
+    width: 100vw;
+}
+
+.container {
+    display: flex;
+    justify-content: left;
+    flex-direction: row;
+    height: 100%;
+}
+/* Reset and base styles  */
+* {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:focus,
+:active {
+    /*outline: none;*/
+}
+
+a:focus,
+a:active {
+    /* outline: none;*/
+}
+
+/* Links */
+
+a, a:link, a:visited  {
+    /* color: inherit; */
+    text-decoration: none;
+    /* display: inline-block; */
+}
+
+a:hover  {
+    /* color: inherit; */
+    text-decoration: none;
+}
+
+/* Common */
+
+aside, nav, footer, header, section, main {
+    display: block;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+ul, ul li {
+    list-style: none;
+}
+
+img {
+    vertical-align: top;
+}
+
+img, svg {
+    max-width: 100%;
+    height: auto;
+}
+
+address {
+    font-style: normal;
+}
+
+/* Form */
+
+input, textarea, button, select {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+}
+
+input::-ms-clear {
+    display: none;
+}
+
+button, input[type="submit"] {
+    display: inline-block;
+    box-shadow: none;
+    background-color: transparent;
+    background: none;
+    cursor: pointer;
+}
+
+input:focus, input:active,
+button:focus, button:active {
+    outline: none;
+}
+
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+label {
+    cursor: pointer;
+}
+
+legend {
+    display: block;
+}
+
+.avatar-plug {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    background-color: #aaa;
+    font-size: 20px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    border-radius: 50%;
+}
+
+
+.dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 20px;
+    overflow: hidden;
+    height: 100%;
+}
+
+
+.dialog__message-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.dialog__message-container::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 20px;
+    background-color: #AAAAAA;
+    background-clip: content-box;
+}
+
+.dialog__message-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 75px;
+    max-height: 200px;
+    border: 1px solid #AAAAAA;
+    border-radius: 10px;
+}
+
+.dialog__message-input__input {
+    max-height: 300px;
+    padding: 0.375rem 0.75rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    word-wrap: break-word;
+    line-height: 1.5;
+    overflow: hidden;
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    resize: none;
+    overflow: auto;
+}
+
+.dialog__message-input__submit {
+    margin: 15px;
+    width: 50px;
+    height: 50px;
+    background-color: #288DEA;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 3px;
+}
+
+.dialog__message-input__submit-img {
+    margin: 0px;
+    width: 50px;
+    height: 50px;
+    background-image: url('/img/dialog/dialog_submit_2.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.dialog__message-input__file {
+    background-image: url('/img/dialog/dialog_attachment.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    margin: 15px;
+    width: 50px;
+    height: 50px;
+}
+
+input[type=file]::file-selector-button {
+    visibility: hidden;
+}
+
+.dialog__message-container {
+    flex-direction: column;
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.dialog__message-containter__message {
+    display: flex;
+    align-items: top;
+    margin-bottom: 20px;
+}
+
+.dialog__message-containter__message_myself {
+    flex-direction: row-reverse;
+}
+
+.dialog__message-containter__message_companion {
+    flex-direction: row;
+}
+
+.dialog__message__text-container {
+    position: relative;
+    min-height: 55px;
+    min-width: 100px;
+    max-width: 450px;
+    word-break: break-all;
+    padding: 15px 10px 15px 10px;
+}
+
+.dialog__message__text-container__time {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 10px;
+}
+
+.dialog__message__text-container_companion {
+    background-color: #EAFAFE;
+    border-radius: 0px 10px 10px 10px;
+}
+
+.dialog__message__text-container_myself {
+    background-color: #EEEEEE;
+    border-radius: 10px 0px 10px 10px;
+}
+
+.dialog__message__avatar {
+    position: relative;
+    min-height: 40px;
+    min-width: 40px;
+    border-radius: 20px;
+    margin: 0px 5px;
+}
+
+.dialog__message__avatar_abs {
+    position: absolute;
+    min-height: 40px;
+    min-width: 40px;
+}
+
+.dialog__message__avatar_letter {
+    position: absolute;
+    top: 11px;
+    left: 13px;
+}
+
+.chat-action:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
