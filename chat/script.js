@@ -131,7 +131,15 @@ var FAKE_CONTACTS = [
       action.disabled = !status;
     },
     sendMessage: function(message) { // fake request
+
       return new Promise(function(res) {
+        /*
+         *
+         * socket.emit('message', message, function() {
+         *   res();
+         * })
+         *
+        * */
         setTimeout(function() {
           res();
         }, 1000)
@@ -211,10 +219,17 @@ var FAKE_CONTACTS = [
       contactsContainer.classList.add('contacts--open');
     },
     scrollToTop: function() {
-      console.log(chatroom.scrollHeight)
       chatroom.scrollTop = chatroom.scrollHeight;
     },
     loadMessages: function(messagesList) {
+      /*
+      * Тут надо дернуть список мессаг примерно так
+      * socket.on('messages', function(list) {
+      *     var m = CHAT.getAllMessagesMarkup(messagesList, CHAT.getMessageMarkup);
+      *     CHAT.setMarkupOnChatRoom(m);
+      *     CHAT.scrollToTop();
+      * })
+      * */
       setTimeout(function () {
         var m = CHAT.getAllMessagesMarkup(messagesList, CHAT.getMessageMarkup);
         CHAT.setMarkupOnChatRoom(m);
@@ -222,12 +237,32 @@ var FAKE_CONTACTS = [
       }, 2000);
     },
     loadContacts: function(contacts /*IContact*/) {
+
+      /*
+      * Тут надо дернуть список контактов примерно так
+      * socket.on('contacts', function(list) {
+      *     var c = CHAT.getAllContactsMarkup(list, CHAT.getContactMarkup);
+      *     CHAT.setMarkupOnContactsList(c);
+      * })
+      * */
+
       setTimeout(function() {
         var c = CHAT.getAllContactsMarkup(contacts, CHAT.getContactMarkup);
         CHAT.setMarkupOnContactsList(c);
       }, 1000)
     },
     for_test_IncomingMessage(payload /* IMessagePayload */) {
+      /*
+      * Это примерный способ как сунуть мессагу в чат
+      * socket.on('income-message', function(payload) {
+             var markup = CHAT.getMessageMarkup('partner', {
+              letter: payload.letter,
+              message: payload.message,
+              time: payload.time
+            });
+            CHAT.setMarkupOnChatRoom(markup);
+      * })
+      * */
       var markup = CHAT.getMessageMarkup('partner', {
         letter: payload.letter,
         message: payload.message,
